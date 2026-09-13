@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Buku Kas Tunai (BKT)</title>
+
+<style>
+
+/* =========================================
+   RESET
+========================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:30px;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f3f4f6;
+    color:#222;
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header{
+    background:#198754;
+    color:white;
+    padding:25px;
+    border-radius:10px;
+    margin-bottom:25px;
+}
+
+.header h1{
+    margin:0;
+    font-size:28px;
+}
+
+.header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    margin-bottom:25px;
+    box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+.card h2{
+    margin-top:0;
+}
+
+
+/* =========================================
+   BUTTON
+========================================= */
+
+.button-area{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    border:none;
+    padding:12px 20px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.btn:hover{
+    opacity:.9;
+}
+
+.btn-load{
+    background:#6f42c1;
+    color:white;
+}
+
+.btn-excel{
+    background:#198754;
+    color:white;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.table-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.table-title h2{
+    margin:0;
+}
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1050px;
+}
+
+thead{
+    background:#198754;
+    color:white;
+}
+
+th{
+    padding:13px 10px;
+    text-align:center;
+    font-size:13px;
+    white-space:nowrap;
+}
+
+td{
+    padding:12px 10px;
+    border-bottom:1px solid #e5e7eb;
+    font-size:13px;
+}
+
+tbody tr:hover{
+    background:#f8fafc;
+}
+
+.text-center{
+    text-align:center;
+}
+
+.text-right{
+    text-align:right;
+}
+
+.total-row{
+    background:#f1f5f9;
+    font-weight:bold;
+}
+
+.total-row td{
+    border-top:2px solid #198754;
+}
+
+.empty-data{
+    text-align:center;
+    padding:30px;
+    color:#777;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
+    background:#e8f5ee;
+    color:#198754;
+    font-size:12px;
+    font-weight:bold;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:700px){
+
+    body{
+        padding:15px;
+    }
+
+    .header{
+        padding:20px;
+    }
+
+    .header h1{
+        font-size:22px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .button-area{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<div class="header">
+
+    <h1>BUKU KAS TUNAI (BKT)</h1>
+
+    <p>
+        Rekapitulasi Buku Kas Tunai dari Data Buku Keuangan (BKU)
+    </p>
+
+</div>
+
+
+
+<!-- =====================================
+     IMPORT JSON
+===================================== -->
+
+<div class="card">
+
+    <h2>Ambil Data dari BKU</h2>
+
+    <p>
+        Pilih file JSON yang sebelumnya disimpan dari aplikasi Buku Keuangan (BKU).
+    </p>
+
+
+    <div class="button-area">
+
+        <button
+            class="btn btn-load"
+            onclick="document.getElementById('fileJSON').click()">
+
+            📂 Ambil JSON BKU
+
+        </button>
+
+
+        <button
+            class="btn btn-excel"
+            onclick="exportExcel()">
+
+            📊 Export Excel
+
+        </button>
+
+
+        <input
+            type="file"
+            id="fileJSON"
+            accept=".json"
+            style="display:none"
+            onchange="bukaJSON(event)">
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================
+     TABEL
+===================================== -->
+
+<div class="card">
+
+
+    <div class="table-title">
+
+        <h2>Daftar Buku Kas Tunai</h2>
+
+
+        <span
+            class="badge"
+            id="jumlahData">
+
+            0 Transaksi
+
+        </span>
+
+    </div>
+
+
+
+    <div class="table-wrapper">
+
+
+        <table id="tabelBKT">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>Nomor</th>
+
+                    <th>Tanggal</th>
+
+                    <th>Uraian</th>
+
+                    <th>Nomor Bukti</th>
+
+                    <th>Penerimaan</th>
+
+                    <th>Pengeluaran</th>
+
+                    <th>Netto Transaksi</th>
+
+                </tr>
+
+            </thead>
+
+
+
+            <tbody id="tableBody">
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="empty-data">
+
+                        Belum ada data BKU yang dimuat
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+
+
+            <tfoot>
+
+                <tr
+                    class="total-row">
+
+                    <td
+                        colspan="4"
+                        class="text-center">
+
+                        TOTAL
+
+                    </td>
+
+
+                    <td
+                        id="totalPenerimaan"
+                        class="text-right">
+
+                        Rp0
+
+                    </td>
+
+
+                    <td
+                        id="totalPengeluaran"
+                        class="text-right">
+
+                        Rp0
+
+                    </td>
+
+
+                    <td
+                        id="totalNetto"
+                        class="text-right">
+
+                        Rp0
+
+                    </td>
+
+                </tr>
+
+            </tfoot>
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================
+   DATA BKT
+===================================== */
+
+let transaksiBKT = [];
+
+
+
+/* =====================================
+   FORMAT RUPIAH
+===================================== */
+
+function formatRupiah(angka){
+
+    angka = Number(angka) || 0;
+
+
+    let hasil = new Intl.NumberFormat(
+        "id-ID",
+        {
+            style:"currency",
+            currency:"IDR",
+            minimumFractionDigits:0,
+            maximumFractionDigits:0
+        }
+    ).format(Math.abs(angka));
+
+
+    /*
+       JIKA NEGATIF
+       TAMPILKAN DALAM KURUNG
+    */
+
+    if(angka < 0){
+
+        return "(" + hasil + ")";
+
+    }
+
+
+    return hasil;
+
+}
+
+
+
+/* =====================================
+   FORMAT TANGGAL
+===================================== */
+
+function formatTanggal(tanggal){
+
+    if(
+        tanggal === undefined ||
+        tanggal === null ||
+        tanggal === "" ||
+        String(tanggal).trim().toLowerCase() === "undefined" ||
+        String(tanggal).trim().toLowerCase() === "null"
+    ){
+
+        return "-";
+
+    }
+
+
+    let nilaiTanggal =
+    String(tanggal).trim();
+
+
+
+    /*
+       FORMAT YYYY-MM-DD
+    */
+
+    let cocokISO =
+    nilaiTanggal.match(
+        /^(\d{4})-(\d{2})-(\d{2})$/
+    );
+
+
+    if(cocokISO){
+
+        return (
+
+            cocokISO[3]
+
+            + "/"
+
+            + cocokISO[2]
+
+            + "/"
+
+            + cocokISO[1]
+
+        );
+
+    }
+
+
+
+    /*
+       FORMAT YYYY-MM-DDTHH:mm:ss
+    */
+
+    let cocokTanggalWaktu =
+    nilaiTanggal.match(
+        /^(\d{4})-(\d{2})-(\d{2})T/
+    );
+
+
+    if(cocokTanggalWaktu){
+
+        return (
+
+            cocokTanggalWaktu[3]
+
+            + "/"
+
+            + cocokTanggalWaktu[2]
+
+            + "/"
+
+            + cocokTanggalWaktu[1]
+
+        );
+
+    }
+
+
+
+    return nilaiTanggal;
+
+}
+
+
+
+/* =====================================
+   BUKA JSON BKU
+===================================== */
+
+function bukaJSON(event){
+
+    let file =
+    event.target.files[0];
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    let reader =
+    new FileReader();
+
+
+    reader.onload =
+    function(e){
+
+        try{
+
+
+            let dataJSON =
+            JSON.parse(
+                e.target.result
+            );
+
+
+
+            /* =====================================
+               VALIDASI FORMAT JSON BKU
+            ===================================== */
+
+            if(
+                !dataJSON.transaksi ||
+                !Array.isArray(
+                    dataJSON.transaksi
+                )
+            ){
+
+                alert(
+                    "Format JSON tidak valid! Pastikan file berasal dari BKU."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =====================================
+               FILTER DATA BKU
+               
+               PENERIMAAN BKU DI SKIP
+               
+               YANG MASUK BKT HANYA:
+               
+               - PENARIKAN
+               - PENGELUARAN
+               - PPN
+               - PPH22
+            ===================================== */
+
+            transaksiBKT =
+            dataJSON.transaksi
+
+            .filter(
+
+                function(data){
+
+
+                    let penarikanBKU =
+
+                    Number(
+                        data.penarikan
+                    ) || 0;
+
+
+
+                    let pengeluaranBKU =
+
+                    Number(
+                        data.pengeluaran
+                    ) || 0;
+
+
+
+                    let ppn =
+
+                    Number(
+                        data.ppn
+                    ) || 0;
+
+
+
+                    let pph22 =
+
+                    Number(
+                        data.pph22
+                    ) || 0;
+
+
+
+                    /*
+                       HANYA AMBIL TRANSAKSI
+                       YANG MEMILIKI:
+
+                       PENARIKAN
+                       ATAU
+                       PENGELUARAN
+                       ATAU
+                       PPN
+                       ATAU
+                       PPH22
+                    */
+
+                    return (
+
+                        penarikanBKU > 0
+
+                        ||
+
+                        pengeluaranBKU > 0
+
+                        ||
+
+                        ppn > 0
+
+                        ||
+
+                        pph22 > 0
+
+                    );
+
+                }
+
+            )
+
+
+            /* =====================================
+               KONVERSI BKU KE BKT
+            ===================================== */
+
+            .map(
+
+                function(data,index){
+
+
+                    /* ==============================
+                       PENARIKAN BKU
+                       MENJADI
+                       PENERIMAAN BKT
+                    ============================== */
+
+                    let penerimaan =
+
+                    Number(
+                        data.penarikan
+                    ) || 0;
+
+
+
+                    /* ==============================
+                       PENGELUARAN BKT
+
+                       PENGELUARAN BKU
+                       +
+                       PPN
+                       +
+                       PPH22
+                    ============================== */
+
+                    let pengeluaran =
+
+                    (Number(
+                        data.pengeluaran
+                    ) || 0)
+
+                    +
+
+                    (Number(
+                        data.ppn
+                    ) || 0)
+
+                    +
+
+                    (Number(
+                        data.pph22
+                    ) || 0);
+
+
+
+                    /* ==============================
+                       NETTO
+                    ============================== */
+
+                    let netto =
+
+                    penerimaan
+
+                    -
+
+                    pengeluaran;
+
+
+
+                    /* ==============================
+                       DATA BKT
+                    ============================== */
+
+                    return {
+
+
+                        /*
+                           NOMOR BARU BKT
+
+                           DIMULAI DARI 1
+                           SETELAH DATA
+                           PENERIMAAN BKU
+                           DI SKIP
+                        */
+
+                        nomor:
+
+                        index + 1,
+
+
+
+                        tanggal:
+
+                        data.tanggal
+
+                        ||
+
+                        data.Tanggal
+
+                        ||
+
+                        data.date
+
+                        ||
+
+                        data.tgl
+
+                        ||
+
+                        "",
+
+
+
+                        /*
+                           URAIAN TETAP
+                           DIAMBIL DARI BKU
+                        */
+
+                        uraian:
+
+                        data.uraian
+
+                        ||
+
+                        "",
+
+
+
+                        nomorBukti:
+
+                        data.nomorBukti
+
+                        ||
+
+                        "",
+
+
+
+                        penerimaan:
+
+                        penerimaan,
+
+
+
+                        pengeluaran:
+
+                        pengeluaran,
+
+
+
+                        netto:
+
+                        netto
+
+                    };
+
+                }
+
+            );
+
+
+
+            /* =====================================
+               TAMPILKAN DATA
+            ===================================== */
+
+            tampilkanTabel();
+
+
+
+            alert(
+                "Data BKU berhasil dimuat ke Buku Kas Tunai!"
+            );
+
+
+        }
+
+
+        catch(error){
+
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "File JSON tidak dapat dibaca!"
+            );
+
+        }
+
+    };
+
+
+    reader.readAsText(
+        file
+    );
+
+
+    /*
+       RESET INPUT FILE
+    */
+
+    event.target.value = "";
+
+}
+
+
+
+/* =====================================
+   TAMPILKAN TABEL
+===================================== */
+
+function tampilkanTabel(){
+
+
+    let tableBody =
+
+    document.getElementById(
+        "tableBody"
+    );
+
+
+    tableBody.innerHTML = "";
+
+
+
+    /* =====================================
+       TOTAL
+    ===================================== */
+
+    let totalPenerimaan = 0;
+
+    let totalPengeluaran = 0;
+
+    let totalNetto = 0;
+
+
+
+    /* =====================================
+       DATA KOSONG
+    ===================================== */
+
+    if(
+        transaksiBKT.length === 0
+    ){
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="empty-data">
+
+                    Belum ada transaksi yang sesuai untuk BKT
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+
+    /* =====================================
+       LOOP DATA
+    ===================================== */
+
+    transaksiBKT.forEach(
+
+        function(data,index){
+
+
+            let penerimaan =
+
+            Number(
+                data.penerimaan
+            ) || 0;
+
+
+
+            let pengeluaran =
+
+            Number(
+                data.pengeluaran
+            ) || 0;
+
+
+
+            let netto =
+
+            penerimaan
+
+            -
+
+            pengeluaran;
+
+
+
+            /*
+               UPDATE NETTO
+            */
+
+            data.netto =
+            netto;
+
+
+
+            /* =====================================
+               TOTAL
+            ===================================== */
+
+            totalPenerimaan +=
+            penerimaan;
+
+
+            totalPengeluaran +=
+            pengeluaran;
+
+
+            totalNetto +=
+            netto;
+
+
+
+            /* =====================================
+               TAMPILKAN BARIS
+            ===================================== */
+
+            tableBody.innerHTML += `
+
+                <tr>
+
+
+                    <td
+                        class="text-center">
+
+                        ${index + 1}
+
+                    </td>
+
+
+                    <td>
+
+                        ${formatTanggal(
+                            data.tanggal
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${data.uraian || "-"}
+
+                    </td>
+
+
+                    <td>
+
+                        ${data.nomorBukti || "-"}
+
+                    </td>
+
+
+                    <td
+                        class="text-right">
+
+                        ${formatRupiah(
+                            penerimaan
+                        )}
+
+                    </td>
+
+
+                    <td
+                        class="text-right">
+
+                        ${formatRupiah(
+                            pengeluaran
+                        )}
+
+                    </td>
+
+
+                    <td
+                        class="text-right">
+
+                        <strong>
+
+                            ${formatRupiah(
+                                netto
+                            )}
+
+                        </strong>
+
+                    </td>
+
+
+                </tr>
+
+            `;
+
+        }
+
+    );
+
+
+
+    /* =====================================
+       UPDATE TOTAL
+    ===================================== */
+
+    document.getElementById(
+        "totalPenerimaan"
+    ).innerText =
+
+    formatRupiah(
+        totalPenerimaan
+    );
+
+
+
+    document.getElementById(
+        "totalPengeluaran"
+    ).innerText =
+
+    formatRupiah(
+        totalPengeluaran
+    );
+
+
+
+    document.getElementById(
+        "totalNetto"
+    ).innerText =
+
+    formatRupiah(
+        totalNetto
+    );
+
+
+
+    /* =====================================
+       JUMLAH DATA
+    ===================================== */
+
+    document.getElementById(
+        "jumlahData"
+    ).innerText =
+
+    transaksiBKT.length
+
+    +
+
+    " Transaksi";
+
+}
+
+
+
+/* =====================================
+   EXPORT EXCEL
+===================================== */
+
+function exportExcel(){
+
+
+    if(
+        transaksiBKT.length === 0
+    ){
+
+        alert(
+            "Belum ada data untuk diexport!"
+        );
+
+        return;
+
+    }
+
+
+
+    /* =====================================
+       HEADER CSV
+    ===================================== */
+
+    let csv =
+
+    "Nomor;Tanggal;Uraian;Nomor Bukti;Penerimaan;Pengeluaran;Netto Transaksi\n";
+
+
+
+    let totalPenerimaan = 0;
+
+    let totalPengeluaran = 0;
+
+    let totalNetto = 0;
+
+
+
+    /* =====================================
+       DATA
+    ===================================== */
+
+    transaksiBKT.forEach(
+
+        function(data,index){
+
+
+            let penerimaan =
+
+            Number(
+                data.penerimaan
+            ) || 0;
+
+
+
+            let pengeluaran =
+
+            Number(
+                data.pengeluaran
+            ) || 0;
+
+
+
+            let netto =
+
+            penerimaan
+
+            -
+
+            pengeluaran;
+
+
+
+            totalPenerimaan +=
+            penerimaan;
+
+
+            totalPengeluaran +=
+            pengeluaran;
+
+
+            totalNetto +=
+            netto;
+
+
+
+            csv +=
+
+            (index + 1)
+
+            + ";"
+
+            + formatTanggal(
+                data.tanggal
+            )
+
+            + ";"
+
+            + '"'
+
+            + (
+                data.uraian || ""
+            ).replace(
+                /"/g,
+                '""'
+            )
+
+            + '"'
+
+            + ";"
+
+            + '"'
+
+            + (
+                data.nomorBukti || ""
+            ).replace(
+                /"/g,
+                '""'
+            )
+
+            + '"'
+
+            + ";"
+
+            + penerimaan
+
+            + ";"
+
+            + pengeluaran
+
+            + ";"
+
+            + netto
+
+            + "\n";
+
+        }
+
+    );
+
+
+
+    /* =====================================
+       TOTAL
+    ===================================== */
+
+    csv +=
+
+    "TOTAL;;;"
+
+    + ";"
+
+    + totalPenerimaan
+
+    + ";"
+
+    + totalPengeluaran
+
+    + ";"
+
+    + totalNetto;
+
+
+
+    /* =====================================
+       UTF-8 BOM
+    ===================================== */
+
+    let bom =
+    "\uFEFF";
+
+
+
+    let blob =
+
+    new Blob(
+
+        [
+            bom + csv
+        ],
+
+        {
+            type:
+            "text/csv;charset=utf-8;"
+        }
+
+    );
+
+
+
+    let url =
+
+    URL.createObjectURL(
+        blob
+    );
+
+
+
+    let link =
+
+    document.createElement(
+        "a"
+    );
+
+
+    link.href =
+    url;
+
+
+
+    /* =====================================
+       NAMA FILE
+    ===================================== */
+
+    let sekarang =
+    new Date();
+
+
+
+    let tanggalFile =
+
+    sekarang.getFullYear()
+
+    + "-"
+
+    +
+
+    String(
+        sekarang.getMonth() + 1
+    ).padStart(
+        2,
+        "0"
+    )
+
+    + "-"
+
+    +
+
+    String(
+        sekarang.getDate()
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+
+    link.download =
+
+    "BukuKasTunai_"
+
+    +
+
+    tanggalFile
+
+    +
+
+    ".csv";
+
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    alert(
+        "Data BKT berhasil diexport! File dapat dibuka menggunakan Microsoft Excel."
+    );
+
+}
+
+
+
+/* =====================================
+   LOAD AWAL
+===================================== */
+
+tampilkanTabel();
+
+
+</script>
+
+
+</body>
+</html>

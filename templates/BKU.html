@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Buku Keuangan</title>
+
+<style>
+
+/* =========================================
+   RESET
+========================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+    padding:30px;
+
+    font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+    background:#f3f4f6;
+    color:#222;
+
+}
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container{
+
+    max-width:1450px;
+    margin:auto;
+
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header{
+
+    background:#198754;
+    color:white;
+
+    padding:25px;
+    border-radius:10px;
+
+    margin-bottom:25px;
+
+}
+
+.header h1{
+
+    margin:0;
+    font-size:28px;
+
+}
+
+.header p{
+
+    margin:8px 0 0;
+    font-size:15px;
+
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:10px;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+
+}
+
+.card h2{
+
+    margin-top:0;
+    margin-bottom:20px;
+
+}
+
+/* =========================================
+   FORM GRID
+========================================= */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:18px;
+
+}
+
+.form-group{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.form-group label{
+
+    font-weight:bold;
+
+    margin-bottom:7px;
+
+    font-size:14px;
+
+}
+
+.form-group small{
+
+    color:#777;
+    font-weight:normal;
+
+}
+
+/* =========================================
+   INPUT
+========================================= */
+
+.form-group input{
+
+    width:100%;
+
+    padding:11px;
+
+    border:
+    1px solid #d1d5db;
+
+    border-radius:6px;
+
+    font-size:14px;
+
+}
+
+.form-group input:focus{
+
+    outline:none;
+
+    border-color:#198754;
+
+}
+
+.money{
+
+    text-align:right;
+
+}
+
+/* =========================================
+   NETTO
+========================================= */
+
+.netto-preview{
+
+    margin-top:22px;
+
+    padding:18px;
+
+    background:#e8f5ee;
+
+    border-left:
+    5px solid #198754;
+
+    border-radius:5px;
+
+}
+
+.netto-preview small{
+
+    display:block;
+
+    margin-bottom:5px;
+
+}
+
+.netto-preview h2{
+
+    margin:0;
+
+    color:#198754;
+
+    font-size:24px;
+
+}
+
+/* =========================================
+   BUTTON
+========================================= */
+
+.button-area{
+
+    margin-top:22px;
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+.btn{
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+}
+
+.btn:hover{
+
+    opacity:.9;
+
+}
+
+.btn-primary{
+
+    background:#198754;
+    color:white;
+
+}
+
+.btn-reset{
+
+    background:#6c757d;
+    color:white;
+
+}
+
+.btn-save{
+
+    background:#0d6efd;
+    color:white;
+
+}
+
+.btn-load{
+
+    background:#6f42c1;
+    color:white;
+
+}
+
+.btn-excel{
+
+    background:#198754;
+    color:white;
+
+}
+
+.btn-edit{
+
+    background:#ffc107;
+    color:#222;
+
+    border:none;
+
+    padding:7px 10px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+    margin-right:5px;
+
+}
+
+.btn-kwitansi{background:#198754;color:white;border:none;padding:7px 10px;border-radius:5px;cursor:pointer;margin-right:5px;}
+
+.btn-delete{
+
+    background:#dc3545;
+    color:white;
+
+    border:none;
+
+    padding:7px 10px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.table-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.table-title h2{
+
+    margin:0;
+
+}
+
+.table-wrapper{
+
+    width:100%;
+
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:1300px;
+
+}
+
+thead{
+
+    background:#198754;
+
+    color:white;
+
+}
+
+th{
+
+    padding:13px 10px;
+
+    text-align:center;
+
+    font-size:13px;
+
+    white-space:nowrap;
+
+}
+
+td{
+
+    padding:12px 10px;
+
+    border-bottom:
+    1px solid #e5e7eb;
+
+    font-size:13px;
+
+}
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+.text-center{
+
+    text-align:center;
+
+}
+
+.text-right{
+
+    text-align:right;
+
+}
+
+.total-row{
+
+    background:#f1f5f9;
+
+    font-weight:bold;
+
+}
+
+.total-row td{
+
+    border-top:
+    2px solid #198754;
+
+}
+
+.empty-data{
+
+    text-align:center;
+
+    padding:30px;
+
+    color:#777;
+
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    background:#e8f5ee;
+
+    color:#198754;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:700px){
+
+    body{
+
+        padding:15px;
+
+    }
+
+    .header{
+
+        padding:20px;
+
+    }
+
+    .header h1{
+
+        font-size:22px;
+
+    }
+
+    .card{
+
+        padding:18px;
+
+    }
+
+    .button-area{
+
+        flex-direction:column;
+
+    }
+
+    .btn{
+
+        width:100%;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<div class="header">
+
+<h1>BUKU KEUANGAN</h1>
+
+<p>
+Sistem Pencatatan Penerimaan, Penarikan dan Pengeluaran
+</p>
+
+</div>
+
+
+<!-- =====================================
+     FORM INPUT
+===================================== -->
+
+<div class="card">
+
+<h2>Input Transaksi</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>Tanggal</label>
+
+<input
+type="date"
+id="tanggal">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Uraian</label>
+
+<input
+type="text"
+id="uraian"
+placeholder="Masukkan uraian transaksi">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Nomor Bukti</label>
+
+<input
+type="text"
+id="nomorBukti"
+placeholder="Contoh: BK-001">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Penerimaan</label>
+
+<input
+type="number"
+id="penerimaan"
+class="money"
+placeholder="0"
+min="0"
+oninput="hitungNetto()">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Penarikan</label>
+
+<input
+type="number"
+id="penarikan"
+class="money"
+placeholder="0"
+min="0"
+oninput="hitungNetto()">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Pengeluaran</label>
+
+<input
+type="number"
+id="pengeluaran"
+class="money"
+placeholder="0"
+min="0"
+oninput="hitungNetto()">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Pajak PPN
+<small>(Opsional)</small>
+</label>
+
+<input
+type="number"
+id="ppn"
+class="money"
+placeholder="0"
+min="0"
+oninput="hitungNetto()">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Pajak PPh 22
+<small>(Opsional)</small>
+</label>
+
+<input
+type="number"
+id="pph22"
+class="money"
+placeholder="0"
+min="0"
+oninput="hitungNetto()">
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================
+     PREVIEW NETTO
+===================================== -->
+
+<div class="netto-preview">
+
+<small>NETTO TRANSAKSI</small>
+
+<h2 id="nettoPreview">
+Rp0
+</h2>
+
+<small>
+Pengeluaran + PPN + PPh 22 (Negatif)
+</small>
+
+</div>
+
+
+<!-- =====================================
+     BUTTON
+===================================== -->
+
+<div class="button-area">
+
+
+<button
+class="btn btn-primary"
+onclick="tambahTransaksi()">
+
++ Tambah Transaksi
+
+</button>
+
+
+<button
+class="btn btn-save"
+onclick="simpanJSON()">
+
+💾 Simpan JSON
+
+</button>
+
+
+<button
+class="btn btn-load"
+onclick="document.getElementById('fileJSON').click()">
+
+📂 Buka JSON
+
+</button>
+
+
+<button
+class="btn btn-excel"
+onclick="exportExcel()">
+
+📊 Export Excel
+
+</button>
+
+
+<button
+class="btn btn-reset"
+onclick="resetForm()">
+
+↻ Reset Form
+
+</button>
+
+
+<input
+type="file"
+id="fileJSON"
+accept=".json"
+style="display:none"
+onchange="bukaJSON(event)">
+
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================
+     TABEL
+===================================== -->
+
+<div class="card">
+
+
+<div class="table-title">
+
+<h2>Daftar Transaksi</h2>
+
+<span
+class="badge"
+id="jumlahData">
+
+0 Transaksi
+
+</span>
+
+</div>
+
+
+<div class="table-wrapper">
+
+
+<table id="tabelKeuangan">
+
+
+<thead>
+
+<tr>
+
+<th>No</th>
+
+<th>Tanggal</th>
+
+<th>Uraian</th>
+
+<th>Nomor Bukti</th>
+
+<th>Penerimaan</th>
+
+<th>Penarikan</th>
+
+<th>Pengeluaran</th>
+
+<th>PPN</th>
+
+<th>PPh 22</th>
+
+<th>Netto Transaksi</th>
+
+<th>Aksi</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tableBody">
+
+<tr>
+
+<td
+colspan="11"
+class="empty-data">
+
+Belum ada transaksi
+
+</td>
+
+</tr>
+
+</tbody>
+
+
+<tfoot>
+
+<tr
+class="total-row">
+
+
+<td
+colspan="4"
+class="text-center">
+
+TOTAL
+
+</td>
+
+
+<td
+id="totalPenerimaan"
+class="text-right">
+
+Rp0
+
+</td>
+
+
+<td
+id="totalPenarikan"
+class="text-right">
+
+Rp0
+
+</td>
+
+
+<td
+id="totalPengeluaran"
+class="text-right">
+
+Rp0
+
+</td>
+
+
+<td
+id="totalPPN"
+class="text-right">
+
+Rp0
+
+</td>
+
+
+<td
+id="totalPPh"
+class="text-right">
+
+Rp0
+
+</td>
+
+
+<td
+id="totalNetto"
+class="text-right">
+
+Rp0
+
+</td>
+
+
+<td></td>
+
+
+</tr>
+
+</tfoot>
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================
+     JAVASCRIPT
+===================================== -->
+
+<script>
+
+
+/* =====================================
+   DATA TRANSAKSI
+===================================== */
+
+let transaksi = [];
+
+
+/* =====================================
+   INDEX EDIT
+===================================== */
+
+let editIndex = -1;
+
+
+/* =====================================
+   FORMAT RUPIAH
+===================================== */
+
+function formatRupiah(angka){
+
+    angka = Number(angka) || 0;
+
+    let nilaiFormat = new Intl.NumberFormat(
+        "id-ID",
+        {
+            style:"currency",
+            currency:"IDR",
+            minimumFractionDigits:0,
+            maximumFractionDigits:0
+        }
+    ).format(Math.abs(angka));
+
+    return angka < 0
+        ? "(" + nilaiFormat + ")"
+        : nilaiFormat;
+
+}
+
+
+/* =====================================
+   FORMAT TANGGAL
+   MEMPERBAIKI UNDEFINED
+===================================== */
+
+function formatTanggal(tanggal){
+
+    // Pastikan nilai tanggal benar-benar tersedia
+    if(
+        tanggal === undefined ||
+        tanggal === null ||
+        tanggal === "" ||
+        String(tanggal).trim().toLowerCase() === "undefined" ||
+        String(tanggal).trim().toLowerCase() === "null"
+    ){
+        return "-";
+    }
+
+    let nilaiTanggal = String(tanggal).trim();
+
+    // Format input date: YYYY-MM-DD
+    let cocokISO = nilaiTanggal.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);
+
+    if(cocokISO){
+        return cocokISO[3] + "/" + cocokISO[2] + "/" + cocokISO[1];
+    }
+
+    // Format tanggal dengan waktu: YYYY-MM-DDTHH:mm:ss...
+    let cocokTanggalWaktu = nilaiTanggal.match(/^(\\d{4})-(\\d{2})-(\\d{2})T/);
+
+    if(cocokTanggalWaktu){
+        return cocokTanggalWaktu[3] + "/" +
+               cocokTanggalWaktu[2] + "/" +
+               cocokTanggalWaktu[1];
+    }
+
+    // Coba format tanggal lain
+    let date = new Date(nilaiTanggal);
+
+    if(!isNaN(date.getTime())){
+        return String(date.getDate()).padStart(2,"0") + "/" +
+               String(date.getMonth() + 1).padStart(2,"0") + "/" +
+               date.getFullYear();
+    }
+
+    // Jangan pernah menampilkan "undefined"
+    return "-";
+
+}
+
+
+/* =====================================
+   HITUNG NETTO
+===================================== */
+
+function hitungNetto(){
+
+    let pengeluaran = Number(
+        document.getElementById("pengeluaran").value
+    ) || 0;
+
+    let ppn = Number(
+        document.getElementById("ppn").value
+    ) || 0;
+
+    let pph22 = Number(
+        document.getElementById("pph22").value
+    ) || 0;
+
+    let netto = -(
+        pengeluaran +
+        ppn +
+        pph22
+    );
+
+    document.getElementById("nettoPreview").innerText =
+    formatRupiah(netto);
+
+}
+
+
+/* =====================================
+   TAMBAH TRANSAKSI
+===================================== */
+
+function tambahTransaksi(){
+
+    let tanggal =
+    document.getElementById(
+        "tanggal"
+    ).value;
+
+
+    let uraian =
+    document.getElementById(
+        "uraian"
+    ).value.trim();
+
+
+    let nomorBukti =
+    document.getElementById(
+        "nomorBukti"
+    ).value.trim();
+
+
+    let penerimaan = Number(
+        document.getElementById(
+            "penerimaan"
+        ).value
+    ) || 0;
+
+
+    let penarikan = Number(
+        document.getElementById(
+            "penarikan"
+        ).value
+    ) || 0;
+
+
+    let pengeluaran = Number(
+        document.getElementById(
+            "pengeluaran"
+        ).value
+    ) || 0;
+
+
+    let ppn = Number(
+        document.getElementById(
+            "ppn"
+        ).value
+    ) || 0;
+
+
+    let pph22 = Number(
+        document.getElementById(
+            "pph22"
+        ).value
+    ) || 0;
+
+
+    /* VALIDASI */
+
+    if(!tanggal){
+
+        alert(
+            "Tanggal wajib diisi!"
+        );
+
+        return;
+
+    }
+
+
+    if(!uraian){
+
+        alert(
+            "Uraian wajib diisi!"
+        );
+
+        return;
+
+    }
+
+
+    /* HITUNG NETTO */
+
+    let netto = -(
+        pengeluaran +
+        ppn +
+        pph22
+    );
+
+
+    /* DATA */
+
+    let dataBaru = {
+
+        tanggal:tanggal,
+
+        uraian:uraian,
+
+        nomorBukti:nomorBukti,
+
+        penerimaan:penerimaan,
+
+        penarikan:penarikan,
+
+        pengeluaran:pengeluaran,
+
+        ppn:ppn,
+
+        pph22:pph22,
+
+        netto:netto
+
+    };
+
+
+    /* EDIT */
+
+    if(editIndex >= 0){
+
+        transaksi[editIndex] =
+        dataBaru;
+
+        editIndex = -1;
+
+        alert(
+            "Data berhasil diperbarui!"
+        );
+
+    }
+
+    else{
+
+        transaksi.push(
+            dataBaru
+        );
+
+        alert(
+            "Transaksi berhasil ditambahkan!"
+        );
+
+    }
+
+
+    tampilkanTabel();
+
+    resetForm();
+
+}
+
+
+/* =====================================
+   TAMPILKAN TABEL
+===================================== */
+
+function tampilkanTabel(){
+
+    let tableBody =
+
+    document.getElementById(
+        "tableBody"
+    );
+
+
+    tableBody.innerHTML = "";
+
+
+    /* TOTAL */
+
+    let totalPenerimaan = 0;
+
+    let totalPenarikan = 0;
+
+    let totalPengeluaran = 0;
+
+    let totalPPN = 0;
+
+    let totalPPh = 0;
+
+    let totalNetto = 0;
+
+
+    /* DATA KOSONG */
+
+    if(transaksi.length === 0){
+
+        tableBody.innerHTML = `
+
+        <tr>
+
+        <td
+        colspan="11"
+        class="empty-data">
+
+        Belum ada transaksi
+
+        </td>
+
+        </tr>
+
+        `;
+
+    }
+
+
+    /* LOOP DATA */
+
+    transaksi.forEach(
+
+        function(data,index){
+
+
+            /* PASTIKAN DATA ANGKA */
+
+            let penerimaan =
+            Number(data.penerimaan) || 0;
+
+            let penarikan =
+            Number(data.penarikan) || 0;
+
+            let pengeluaran =
+            Number(data.pengeluaran) || 0;
+
+            let ppn =
+            Number(data.ppn) || 0;
+
+            let pph22 =
+            Number(data.pph22) || 0;
+
+
+            /* HITUNG ULANG NETTO */
+
+            let netto = -(
+                pengeluaran +
+                ppn +
+                pph22
+            );
+
+
+            /* SIMPAN NETTO */
+
+            data.netto = netto;
+
+
+            /* TOTAL */
+
+            totalPenerimaan +=
+            penerimaan;
+
+            totalPenarikan +=
+            penarikan;
+
+            totalPengeluaran +=
+            pengeluaran;
+
+            totalPPN +=
+            ppn;
+
+            totalPPh +=
+            pph22;
+
+            totalNetto +=
+            netto;
+
+
+            tableBody.innerHTML += `
+
+            <tr>
+
+
+            <td class="text-center">
+
+            ${index + 1}
+
+            </td>
+
+
+            <td>
+
+            ${formatTanggal(
+                data.tanggal
+            )}
+
+            </td>
+
+
+            <td>
+
+            ${data.uraian || "-"}
+
+            </td>
+
+
+            <td>
+
+            ${data.nomorBukti || "-"}
+
+            </td>
+
+
+            <td class="text-right">
+
+            ${formatRupiah(
+                penerimaan
+            )}
+
+            </td>
+
+
+            <td class="text-right">
+
+            ${formatRupiah(
+                penarikan
+            )}
+
+            </td>
+
+
+            <td class="text-right">
+
+            ${formatRupiah(
+                pengeluaran
+            )}
+
+            </td>
+
+
+            <td class="text-right">
+
+            ${formatRupiah(
+                ppn
+            )}
+
+            </td>
+
+
+            <td class="text-right">
+
+            ${formatRupiah(
+                pph22
+            )}
+
+            </td>
+
+
+            <td class="text-right">
+
+            <strong>
+
+            ${formatRupiah(
+                netto
+            )}
+
+            </strong>
+
+            </td>
+
+
+            <td class="text-center">
+
+
+            <button
+
+            class="btn-kwitansi"
+            onclick="cetakKwitansi(${index})">🖨️ Kwitansi</button>
+
+            <button
+
+            class="btn-edit"
+
+            onclick="editTransaksi(${index})">
+
+            Edit
+
+            </button>
+
+
+            <button
+
+            class="btn-delete"
+
+            onclick="hapusTransaksi(${index})">
+
+            Hapus
+
+            </button>
+
+
+            </td>
+
+
+            </tr>
+
+            `;
+
+        }
+
+    );
+
+
+    /* UPDATE TOTAL */
+
+    document.getElementById(
+        "totalPenerimaan"
+    ).innerText =
+    formatRupiah(totalPenerimaan);
+
+
+    document.getElementById(
+        "totalPenarikan"
+    ).innerText =
+    formatRupiah(totalPenarikan);
+
+
+    document.getElementById(
+        "totalPengeluaran"
+    ).innerText =
+    formatRupiah(totalPengeluaran);
+
+
+    document.getElementById(
+        "totalPPN"
+    ).innerText =
+    formatRupiah(totalPPN);
+
+
+    document.getElementById(
+        "totalPPh"
+    ).innerText =
+    formatRupiah(totalPPh);
+
+
+    document.getElementById(
+        "totalNetto"
+    ).innerText =
+    formatRupiah(totalNetto);
+
+
+    /* JUMLAH DATA */
+
+    document.getElementById(
+        "jumlahData"
+    ).innerText =
+
+    transaksi.length
+
+    +
+
+    " Transaksi";
+
+}
+
+
+/* =====================================
+   CETAK KWITANSI
+===================================== */
+function cetakKwitansi(index){
+    let data = transaksi[index];
+    if(!data){ alert("Data transaksi tidak ditemukan!"); return; }
+
+    let pengeluaran = Number(data.pengeluaran) || 0;
+    let ppn = Number(data.ppn) || 0;
+    let pph22 = Number(data.pph22) || 0;
+
+    let dataKwitansi = {
+        nomor: data.nomorBukti || "",
+        pembayaran: data.uraian || "",
+        nilai: pengeluaran + ppn + pph22,
+        ppn: ppn,
+        pph: pph22,
+        tanggal: data.tanggal || ""
+    };
+
+    localStorage.setItem("dataKwitansi", JSON.stringify(dataKwitansi));
+    // Buka halaman kwitansi secara terpisah di tab baru
+    let tabKwitansi = window.open("kwitansi.html", "_blank");
+
+    if(!tabKwitansi){
+        alert("Popup diblokir oleh browser. Izinkan popup untuk membuka kwitansi di tab baru.");
+    }
+}
+
+
+/* =====================================
+   EDIT TRANSAKSI
+===================================== */
+
+function editTransaksi(index){
+
+    let data =
+    transaksi[index];
+
+
+    document.getElementById(
+        "tanggal"
+    ).value =
+    data.tanggal || "";
+
+
+    document.getElementById(
+        "uraian"
+    ).value =
+    data.uraian || "";
+
+
+    document.getElementById(
+        "nomorBukti"
+    ).value =
+    data.nomorBukti || "";
+
+
+    document.getElementById(
+        "penerimaan"
+    ).value =
+    data.penerimaan || "";
+
+
+    document.getElementById(
+        "penarikan"
+    ).value =
+    data.penarikan || "";
+
+
+    document.getElementById(
+        "pengeluaran"
+    ).value =
+    data.pengeluaran || "";
+
+
+    document.getElementById(
+        "ppn"
+    ).value =
+    data.ppn || "";
+
+
+    document.getElementById(
+        "pph22"
+    ).value =
+    data.pph22 || "";
+
+
+    editIndex = index;
+
+
+    hitungNetto();
+
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+/* =====================================
+   HAPUS
+===================================== */
+
+function hapusTransaksi(index){
+
+    let konfirmasi =
+    confirm(
+        "Hapus transaksi ini?"
+    );
+
+
+    if(!konfirmasi){
+
+        return;
+
+    }
+
+
+    transaksi.splice(
+        index,
+        1
+    );
+
+
+    tampilkanTabel();
+
+
+    alert(
+        "Transaksi berhasil dihapus!"
+    );
+
+}
+
+
+/* =====================================
+   RESET FORM
+===================================== */
+
+function resetForm(){
+
+    document.getElementById(
+        "tanggal"
+    ).value = "";
+
+
+    document.getElementById(
+        "uraian"
+    ).value = "";
+
+
+    document.getElementById(
+        "nomorBukti"
+    ).value = "";
+
+
+    document.getElementById(
+        "penerimaan"
+    ).value = "";
+
+
+    document.getElementById(
+        "penarikan"
+    ).value = "";
+
+
+    document.getElementById(
+        "pengeluaran"
+    ).value = "";
+
+
+    document.getElementById(
+        "ppn"
+    ).value = "";
+
+
+    document.getElementById(
+        "pph22"
+    ).value = "";
+
+
+    document.getElementById(
+        "nettoPreview"
+    ).innerText =
+    "Rp0";
+
+
+    editIndex = -1;
+
+}
+
+
+/* =====================================
+   SIMPAN JSON
+===================================== */
+
+function simpanJSON(){
+
+    if(transaksi.length === 0){
+
+        alert(
+            "Belum ada transaksi untuk disimpan!"
+        );
+
+        return;
+
+    }
+
+
+    let dataJSON = {
+
+        aplikasi:
+        "Buku Keuangan",
+
+        versi:
+        "2.0",
+
+        tanggalSimpan:
+        new Date().toISOString(),
+
+        jumlahTransaksi:
+        transaksi.length,
+
+        transaksi:
+        transaksi
+
+    };
+
+
+    let jsonString =
+    JSON.stringify(
+        dataJSON,
+        null,
+        4
+    );
+
+
+    let blob =
+    new Blob(
+
+        [jsonString],
+
+        {
+            type:
+            "application/json"
+        }
+
+    );
+
+
+    let url =
+    URL.createObjectURL(
+        blob
+    );
+
+
+    let link =
+    document.createElement(
+        "a"
+    );
+
+
+    link.href = url;
+
+
+    let sekarang =
+    new Date();
+
+
+    let tanggalFile =
+
+    sekarang.getFullYear()
+
+    +
+
+    "-"
+
+    +
+
+    String(
+        sekarang.getMonth() + 1
+    ).padStart(
+        2,
+        "0"
+    )
+
+    +
+
+    "-"
+
+    +
+
+    String(
+        sekarang.getDate()
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+    link.download =
+
+    "BukuKeuangan_"
+
+    +
+
+    tanggalFile
+
+    +
+
+    ".json";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    alert(
+        "Data berhasil disimpan!"
+    );
+
+}
+
+
+/* =====================================
+   BUKA JSON
+===================================== */
+
+function bukaJSON(event){
+
+    let file =
+    event.target.files[0];
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    let reader =
+    new FileReader();
+
+
+    reader.onload =
+    function(e){
+
+        try{
+
+
+            let data =
+            JSON.parse(
+                e.target.result
+            );
+
+
+            if(
+
+                !data.transaksi ||
+
+                !Array.isArray(
+                    data.transaksi
+                )
+
+            ){
+
+                alert(
+                    "Format JSON tidak valid!"
+                );
+
+                return;
+
+            }
+
+
+            let konfirmasi =
+            confirm(
+
+                "Membuka file akan mengganti data transaksi saat ini. Lanjutkan?"
+
+            );
+
+
+            if(!konfirmasi){
+
+                return;
+
+            }
+
+
+            transaksi =
+            data.transaksi;
+
+
+            /* NORMALISASI DATA */
+
+            transaksi =
+            transaksi.map(
+
+                function(data){
+
+                    return {
+
+                        tanggal:
+                        data.tanggal ||
+                        data.Tanggal ||
+                        data.date ||
+                        data.tgl ||
+                        "",
+
+                        uraian:
+                        data.uraian || "",
+
+                        nomorBukti:
+                        data.nomorBukti || "",
+
+                        penerimaan:
+                        Number(data.penerimaan) || 0,
+
+                        penarikan:
+                        Number(data.penarikan) || 0,
+
+                        pengeluaran:
+                        Number(data.pengeluaran) || 0,
+
+                        ppn:
+                        Number(data.ppn) || 0,
+
+                        pph22:
+                        Number(data.pph22) || 0,
+
+                        netto: -(
+                            (Number(data.pengeluaran) || 0) +
+                            (Number(data.ppn) || 0) +
+                            (Number(data.pph22) || 0)
+                        )
+
+                    };
+
+                }
+
+            );
+
+
+            tampilkanTabel();
+
+
+            alert(
+                "Data berhasil dibuka!"
+            );
+
+
+        }
+
+        catch(error){
+
+            console.error(error);
+
+            alert(
+                "File JSON tidak dapat dibaca!"
+            );
+
+        }
+
+    };
+
+
+    reader.readAsText(
+        file
+    );
+
+
+    event.target.value = "";
+
+}
+
+
+/* =====================================
+   EXPORT EXCEL
+
+   FORMAT CSV
+   BISA DIBUKA EXCEL
+===================================== */
+
+function exportExcel(){
+
+    if(transaksi.length === 0){
+
+        alert(
+            "Belum ada data untuk diexport!"
+        );
+
+        return;
+
+    }
+
+
+    /* HEADER EXCEL */
+
+    let csv =
+
+    "No;Tanggal;Uraian;Nomor Bukti;Penerimaan;Penarikan;Pengeluaran;PPN;PPh 22;Netto Transaksi\n";
+
+
+    /* TOTAL */
+
+    let totalPenerimaan = 0;
+
+    let totalPenarikan = 0;
+
+    let totalPengeluaran = 0;
+
+    let totalPPN = 0;
+
+    let totalPPh = 0;
+
+    let totalNetto = 0;
+
+
+    /* DATA */
+
+    transaksi.forEach(
+
+        function(data,index){
+
+
+            let penerimaan =
+            Number(data.penerimaan) || 0;
+
+            let penarikan =
+            Number(data.penarikan) || 0;
+
+            let pengeluaran =
+            Number(data.pengeluaran) || 0;
+
+            let ppn =
+            Number(data.ppn) || 0;
+
+            let pph22 =
+            Number(data.pph22) || 0;
+
+            let netto = -(
+                pengeluaran +
+                ppn +
+                pph22
+            );
+
+
+            totalPenerimaan +=
+            penerimaan;
+
+            totalPenarikan +=
+            penarikan;
+
+            totalPengeluaran +=
+            pengeluaran;
+
+            totalPPN +=
+            ppn;
+
+            totalPPh +=
+            pph22;
+
+            totalNetto +=
+            netto;
+
+
+            csv +=
+
+            (index + 1)
+
+            + ";"
+
+            + formatTanggal(
+                data.tanggal
+            )
+
+            + ";"
+
+            + '"'
+
+            + (
+                data.uraian || ""
+            ).replace(
+                /"/g,
+                '""'
+            )
+
+            + '"'
+
+            + ";"
+
+            + '"'
+
+            + (
+                data.nomorBukti || ""
+            )
+
+            + '"'
+
+            + ";"
+
+            + penerimaan
+
+            + ";"
+
+            + penarikan
+
+            + ";"
+
+            + pengeluaran
+
+            + ";"
+
+            + ppn
+
+            + ";"
+
+            + pph22
+
+            + ";"
+
+            + netto
+
+            + "\n";
+
+        }
+
+    );
+
+
+    /* TOTAL */
+
+    csv +=
+
+    "TOTAL;;;"
+
+    + ";"
+
+    + totalPenerimaan
+
+    + ";"
+
+    + totalPenarikan
+
+    + ";"
+
+    + totalPengeluaran
+
+    + ";"
+
+    + totalPPN
+
+    + ";"
+
+    + totalPPh
+
+    + ";"
+
+    + totalNetto;
+
+
+    /* BOM UTF-8 */
+
+    let bom =
+    "\uFEFF";
+
+
+    let blob =
+    new Blob(
+
+        [
+
+            bom + csv
+
+        ],
+
+        {
+
+            type:
+            "text/csv;charset=utf-8;"
+
+        }
+
+    );
+
+
+    let url =
+    URL.createObjectURL(
+        blob
+    );
+
+
+    let link =
+    document.createElement(
+        "a"
+    );
+
+
+    link.href = url;
+
+
+    /* NAMA FILE */
+
+    let sekarang =
+    new Date();
+
+
+    let tanggalFile =
+
+    sekarang.getFullYear()
+
+    +
+
+    "-"
+
+    +
+
+    String(
+        sekarang.getMonth() + 1
+    ).padStart(
+        2,
+        "0"
+    )
+
+    +
+
+    "-"
+
+    +
+
+    String(
+        sekarang.getDate()
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+    link.download =
+
+    "BukuKeuangan_"
+
+    +
+
+    tanggalFile
+
+    +
+
+    ".csv";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    alert(
+
+        "Tabel berhasil diexport! File dapat dibuka menggunakan Microsoft Excel."
+
+    );
+
+}
+
+
+/* =====================================
+   LOAD PERTAMA
+===================================== */
+
+tampilkanTabel();
+
+
+</script>
+
+</body>
+</html>
